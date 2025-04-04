@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>News Headlines App</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background: #f9f9f9;
+            padding-top: 30px;
+        }
+        .card {
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            margin-bottom: 25px;
+        }
+        .app-title {
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin-bottom: 30px;
+        }
+        footer {
+            margin-top: 40px;
+            text-align: center;
+            font-size: 0.9rem;
+            color: #888;
+        }
+        .dark-mode {
+            background-color: #121212;
+            color: #ffffff;
+        }
+        
+        .dark-mode .card {
+            background-color: #1e1e1e;
+            color: #ffffff;
+        }
+        
+        .dark-mode .btn-primary {
+            background-color: #bb86fc;
+            border-color: #bb86fc;
+        }
+        
+        .dark-mode .btn-outline-primary {
+            border-color: #bb86fc;
+            color: #bb86fc;
+        }
+        .dark-mode .text-muted {
+            color: #bbbbbb !important; /* Light gray but visible in dark mode */
+        }
+        
+        
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="text-center app-title">📰 News Headlines</div>
+    <p class="text-center text-muted mb-4">
+        Stay informed with the latest headlines from around the world 🌍
+    </p>
+    <div class="text-end">
+        <button id="theme-toggle" class="btn btn-dark">🌙 Dark Mode</button>
+    </div>
+    
+
+    <form method="get" action="{% url 'home' %}" class="row g-3 mb-4">
+        <div class="col-md-4">
+            <label for="country" class="form-label">🌍 Country</label>
+            <select class="form-select" name="country" id="country">
+                {% for label, code in countries.items %}
+                <option value="{{ code }}" {% if code == selected_country %}selected{% endif %}>{{ label }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="col-md-4">
+            <label for="category" class="form-label">📰 Category</label>
+            <select class="form-select" name="category" id="category">
+                {% for cat in categories %}
+                <option value="{{ cat }}" {% if cat == selected_category %}selected{% endif %}>{{ cat|capfirst }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="col-md-4">
+            <label for="search" class="form-label">🔍 Search (optional)</label>
+            <input type="text" class="form-control" name="q" id="search" value="{{ search_query }}" placeholder="Bitcoin, Elections, Cricket">
+        </div>
+        <div class="col-12 d-grid mt-3">
+            <button type="submit" class="btn btn-primary">Get News</button>
+        </div>
+    </form>
+
+    {% if error %}
+        <div class="alert alert-danger">{{ error }}</div>
+    {% endif %}
+
+    {% if articles %}
+        {% for article in articles %}
+            <div class="card">
+                {% if article.image %}
+                    <img src="{{ article.image }}" class="card-img-top" alt="News Image" onerror="this.style.display='none'">
+                {% endif %}
+
+                <div class="card-body">
+                    <h5 class="card-title">{{ article.title }}</h5>
+                    <p class="card-text">
+                        {{ article.description|default:"No description available."|truncatechars:180 }}
+                    </p>
+                    <p class="card-text">
+                        <small class="text-muted">
+                            {{ article.source.name }} • {{ article.publishedAt|date:"M d, Y" }}
+                        </small>
+                    </p>
+                    <a href="{{ article.url }}" class="btn btn-outline-primary" target="_blank">Read Full Article</a>
+                </div>
+            </div>
+        {% endfor %}
+    {% elif not error %}
+        <div class="alert alert-warning">⚠️ No news found for your selection.</div>
+    {% endif %}
+
+    <footer>
+        Made with ❤️ by Yash Agarwal |
+        <a href="https://newsapp-urnea879rfcbyceczcyqbd.streamlit.app" target="_blank">Live Site</a> |
+        <a href="https://github.com/Yash8923/news-headlines-app" target="_blank">GitHub</a>
+    </footer>
+    
+</div>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const toggleBtn = document.getElementById("theme-toggle");
+        const body = document.body;
+
+        // Check localStorage for theme
+        if (localStorage.getItem("darkMode") === "enabled") {
+            body.classList.add("dark-mode");
+            toggleBtn.textContent = "☀️ Light Mode";
+            toggleBtn.classList.remove("btn-dark");
+            toggleBtn.classList.add("btn-light");
+        }
+
+        toggleBtn.addEventListener("click", function () {
+            body.classList.toggle("dark-mode");
+
+            if (body.classList.contains("dark-mode")) {
+                localStorage.setItem("darkMode", "enabled");
+                toggleBtn.textContent = "☀️ Light Mode";
+                toggleBtn.classList.remove("btn-dark");
+                toggleBtn.classList.add("btn-light");
+            } else {
+                localStorage.setItem("darkMode", "disabled");
+                toggleBtn.textContent = "🌙 Dark Mode";
+                toggleBtn.classList.remove("btn-light");
+                toggleBtn.classList.add("btn-dark");
+            }
+        });
+    });
+</script>
+
+</body>
+</html>
