@@ -52,7 +52,7 @@ Open `http://127.0.0.1:8000/` in your browser.
 
 | Light Mode | Dark Mode |
 |------------|-----------|
-| ![Light Mode](https://via.placeholder.com/300x200?text=Light+Mode) | ![Dark Mode](https://via.placeholder.com/300x200?text=Dark+Mode) |
+| ![Light Mode](https://github.com/Yash8923/News_Portal_Web/blob/main/assets/LightMode.png?raw=true) | ![Dark Mode](https://github.com/Yash8923/News_Portal_Web/blob/main/assets/DarkMode.png?raw=true) |
 
 ---
 
