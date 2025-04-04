@@ -2,7 +2,9 @@
 
 A Django-based news application that fetches real-time headlines based on country, category, or custom search.
 
-![News App Preview](https://via.placeholder.com/800x400?text=Project+Preview)
+🌐 [Live Demo](https://news-portal-web.onrender.com/)
+
+![News App Preview](https://github.com/Yash8923/News_Portal_Web/blob/main/Main.png?raw=true)
 
 ---
 
